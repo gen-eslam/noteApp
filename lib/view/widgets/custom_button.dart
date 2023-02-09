@@ -1,51 +1,44 @@
 import 'package:flutter/material.dart';
-
-import 'custom_text.dart';
+import 'package:notes/core/themes/theme.dart';
 
 class CustomButton extends StatelessWidget {
-  final Function()? onPress;
   final String text;
-  final Color textColor;
-  final Alignment textAlignment;
-  final double fontSize;
-  final double borderRadius;
-  final double padding;
-  final Color backgroundColor;
-  final bool inProcess;
+  Function()? onPressed;
 
-  const CustomButton(
-      {super.key,
-      required this.onPress,
-      required this.text,
-      this.textColor = Colors.white,
-      this.textAlignment = Alignment.center,
-      this.fontSize = 16,
-      this.borderRadius = 10,
-      this.padding = 18,
-        this.inProcess =false,
-      this.backgroundColor = Colors.green});
+  CustomButton({super.key,
+    required this.text,
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: onPress,
-      style: ButtonStyle(
-        shape: MaterialStateProperty.all(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
-          ),
-        ),
-        padding: MaterialStateProperty.all(EdgeInsets.all(padding)),
-        backgroundColor: MaterialStateProperty.all(inProcess? Colors.white:backgroundColor),
-      ),
-      child:inProcess ?const CircularProgressIndicator(color: Colors.green,):CustomText(
-        text: text,
-        alignment: textAlignment,
-        color: Colors.white,
-        fontSize: fontSize,
-      ),
-    );
+    return Container(
+        margin: const EdgeInsets.symmetric(vertical: 20,horizontal: 10),
+        decoration: const BoxDecoration(
+          // color: Colors.red,
+            borderRadius: BorderRadius.only(
+              bottomRight: Radius.circular(15),
+              topLeft: Radius.circular(15),
+            ),
+            gradient: LinearGradient(colors: [
+              bluishClr,
+              pinkClr,
+            ],
+              begin: AlignmentDirectional.centerStart,
+              end: AlignmentDirectional.centerEnd,
+
+            )),
+        width: double.infinity,
+        child: MaterialButton(
+            onPressed:onPressed,
+            child: Text(
+              text,
+              style: const TextStyle(
+                color: offWhite,
+                fontWeight: FontWeight.w900,
+                fontSize: 15,
+                letterSpacing: 2,
+              ),
+            )));
   }
 }
-
-

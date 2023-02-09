@@ -1,128 +1,204 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:notes/view/auth/register_view.dart';
+import 'package:notes/core/view_model/auth_view_model.dart';
+import 'package:notes/view/auth/signup_view.dart';
 
-import '../../core/view_model/auth_view_model.dart';
+import '../../core/themes/theme.dart';
+import '../../core/themes/theme_services.dart';
 import '../widgets/custom_button.dart';
-import '../widgets/custom_text.dart';
-import '../widgets/custom_text_button.dart';
 import '../widgets/custom_text_form_field.dart';
 
 class LoginView extends GetWidget<AuthViewModel> {
-  final GlobalKey<FormState> _formLogInKey = GlobalKey<FormState>();
+  LoginView({super.key});
 
-  LoginView({super.key,});
+  final GlobalKey<FormState> _formLoginKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: Colors.white,
-      ),
-      body: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
-        child: Padding(
-          padding: const EdgeInsets.only(
-            top: 50.0,
-            right: 20.0,
-            left: 20.0,
+      backgroundColor: Theme
+          .of(context)
+          .backgroundColor,
+      appBar: _appBar(context),
+      body: _body(context),
+    );
+  }
+
+  AppBar _appBar(BuildContext context) {
+    return AppBar(
+      centerTitle: true,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Notes",
+            style: textAppBarTheme(context).copyWith(
+              letterSpacing: 2.5,
+              color: bluishClr,
+            ),
           ),
+          Text(" App",
+              style: textAppBarTheme(context)
+                  .copyWith(letterSpacing: 2.5, color: pinkClr)),
+        ],
+      ),
+      actions: [
+        IconButton(
+          onPressed: () {
+            ThemeService().switchTheme();
+          },
+          icon: Icon(Get.isDarkMode ? Icons.nightlight : Icons.sunny),
+          color: pinkClr,
+        )
+      ],
+    );
+  }
+
+  _body(BuildContext context) {
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      child: Padding(
+        padding: EdgeInsets.only(
+          top: Get.height / 5,
+          right: 20.0,
+          left: 20.0,
+        ),
+        child: Form(
+          key: _formLoginKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
             children: [
-              Container(
+              Padding(
                 padding: const EdgeInsets.only(
-                  top: 10,
-                  bottom: 10,
-                  left: 10,
                   right: 10,
+                  left: 10,
+                  bottom: 20,
                 ),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.rectangle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.green.withOpacity(0.15),
-                        blurRadius: 10,
-                        spreadRadius: 3,
-                        offset: const Offset(0, 3),
-                      ),
-                    ]),
-                child: Form(
-                  // key: _formLogInKey,
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const CustomText(text: "Welcome", fontSize: 30),
-                          CustomTextButton(
-                              text: "Sign Up",
-                              onPressed: () {
-                                Get.to(()=>RegisterView());
-                              },
-                              textColor: Colors.green,
-                              fontSize: 18),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const CustomText(
-                        text: "Sign in to Continue",
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      CustomTextFormField(
-                        text: "Email",
-                        hint: "gen_eslam2002@gmail.com",
-                        onSave: (value) {},
-                        validator: (value) {},
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      CustomTextFormField(
-                        text: "Password",
-                        hint: "*********",
-                        onSave: (value) {},
-                        validator: (value) {},
-                        suffixIcon: IconButton(
-                          color: Colors.green,
-                          icon: Icon(Icons.add),
-                          onPressed: () {},
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          CustomTextButton(
-                            text: "Forget Password?",
-                            fontSize: 14,
-                            onPressed: () {},
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Welcome",
+                          style: textTitleTheme(context).copyWith(
+                            color: bluishClr,
+                            letterSpacing: 1,
+                            fontSize: 25,
                           ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      CustomButton(
-                        onPress: () {},
-                        text: 'SIGN IN',
-                      ),
-                    ],
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text("Login To Continue",
+                            style: textTitleTheme(context).copyWith(
+                              letterSpacing: 2.5,
+                              color: pinkClr,
+                              fontSize: 15,
+                            )),
+                      ],
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          controller.clearController();
+                          Get.to(const SignUpView());
+                        },
+                        child: Text(
+                          "SignUp",
+                          style: textTitleTheme(context).copyWith(
+                            color: pinkClr,
+                            fontWeight: FontWeight.w100,
+                          ),
+                        ))
+                  ],
+                ),
+              ),
+              GetBuilder<AuthViewModel>(builder: (logic) {
+                return CustomTextFormField(
+                  controller: controller.email,
+                  textInputType: TextInputType.emailAddress,
+                  hintText: "EMAIL",
+                  iconData: Icons.email,
+                  onSave: (value) {
+                    controller.email.text = value!;
+                  },
+                  onChange: (value) {
+                    // controller.errorEmailText =null;
+                  },
+                  validator: (value) {
+                    if(value!.isEmpty){
+                      return "Email Must Be filled";
+                    }
+                   else if(!GetUtils.isEmail(controller.email.text)) {
+                      return "Invalid Email";
+                    }
+                  },
+                );
+              }),
+              GetBuilder<AuthViewModel>(builder: (logic) {
+                return CustomTextFormField(
+                  controller: controller.password,
+
+                  textInputType: TextInputType.visiblePassword,
+                  hintText: "PASSWORD",
+                  iconData: Icons.password,
+                  obscureText: controller.hidePass,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      controller.passwordIcon(),
+                      color: pinkClr,
+                    ),
+                    onPressed: () {
+                      controller.showHidePassword();
+                    },
                   ),
+                  onChange: (value) {
+
+                  },
+                  onSave: (value) {
+                    controller.password.text = value!;
+                  },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Password Must Be filled";
+                    }
+                  },
+                );
+              }),
+              GetBuilder<AuthViewModel>(builder: (logic) {
+                return CustomButton(
+                    text: "Login",
+                    onPressed: () {
+                      _formLoginKey.currentState!.save();
+                      if (_formLoginKey.currentState!.validate()) {
+
+                      }
+                    });
+              }),
+              Text(
+                "-OR-",
+                style: textContentTheme(context).copyWith(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w100,
+                  letterSpacing: 2,
                 ),
               ),
               const SizedBox(
-                height: 20,
+                height: 10,
+              ),
+              TextButton(
+                onPressed: () {
+                  controller.offLineMode();
+                },
+                child: Text(
+                  "Offline Mode",
+                  style: textContentTheme(context).copyWith(
+                    letterSpacing: 1,
+                    color: pinkClr,
+                  ),
+                ),
               ),
             ],
           ),

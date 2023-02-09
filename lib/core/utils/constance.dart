@@ -11,7 +11,10 @@ class Constance{
   static String noteDateTimeCreated = "noteDateTimeCreated";
   static String noteDateTimeEdited = "noteDateTimeEdited";
 
-  //date Format
+  ///date Format
   static String dateFormat = "MMM dd yyy hh:mm a";
+
+  ///get storage
+ static String offLineMode = "offLineMode";
 
 }

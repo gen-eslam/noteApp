@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:notes/core/themes/theme_services.dart';
 import 'package:notes/core/themes/theme.dart';
-import 'package:notes/view/home_view.dart';
+import 'package:notes/view/auth/login_view.dart';
 
 import 'core/bindings/bindings.dart';
 
@@ -17,7 +17,6 @@ void main() async {
 
 class MyApp extends StatelessWidget {
    MyApp({Key? key}) : super(key: key);
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -26,8 +25,8 @@ class MyApp extends StatelessWidget {
       theme: ThemesApp.light,
       darkTheme: ThemesApp.dark,
       initialBinding: Binding(),
-       themeMode: ThemeService().theme,
-      home: HomeView(),
+        themeMode: ThemeService().theme,
+      home: LoginView(),
     );
   }
 }
