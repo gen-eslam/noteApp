@@ -20,7 +20,7 @@ class User {
 
   toJson() {
     return {
-      Constance.userId: userId,
+      Constance.userId: userId.toString(),
       Constance.userName: userName,
       Constance.userEmail: email,
       Constance.userPassword: password,

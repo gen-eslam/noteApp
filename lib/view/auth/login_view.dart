@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:notes/core/utils/constance.dart';
 import 'package:notes/core/view_model/auth_view_model.dart';
 import 'package:notes/view/auth/signup_view.dart';
-
 import '../../core/themes/theme.dart';
 import '../../core/themes/theme_services.dart';
 import '../widgets/custom_button.dart';
@@ -10,15 +10,12 @@ import '../widgets/custom_text_form_field.dart';
 
 class LoginView extends GetWidget<AuthViewModel> {
   LoginView({super.key});
-
   final GlobalKey<FormState> _formLoginKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme
-          .of(context)
-          .backgroundColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: _appBar(context),
       body: _body(context),
     );
@@ -27,21 +24,7 @@ class LoginView extends GetWidget<AuthViewModel> {
   AppBar _appBar(BuildContext context) {
     return AppBar(
       centerTitle: true,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "Notes",
-            style: textAppBarTheme(context).copyWith(
-              letterSpacing: 2.5,
-              color: bluishClr,
-            ),
-          ),
-          Text(" App",
-              style: textAppBarTheme(context)
-                  .copyWith(letterSpacing: 2.5, color: pinkClr)),
-        ],
-      ),
+      title: Constance.appText(context),
       actions: [
         IconButton(
           onPressed: () {
@@ -56,7 +39,7 @@ class LoginView extends GetWidget<AuthViewModel> {
 
   _body(BuildContext context) {
     return SingleChildScrollView(
-      physics: const NeverScrollableScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       child: Padding(
         padding: EdgeInsets.only(
           top: Get.height / 5,
@@ -103,7 +86,7 @@ class LoginView extends GetWidget<AuthViewModel> {
                     TextButton(
                         onPressed: () {
                           controller.clearController();
-                          Get.to(const SignUpView());
+                          Get.to(SignUpView());
                         },
                         child: Text(
                           "SignUp",
@@ -128,10 +111,9 @@ class LoginView extends GetWidget<AuthViewModel> {
                     // controller.errorEmailText =null;
                   },
                   validator: (value) {
-                    if(value!.isEmpty){
+                    if (value!.isEmpty) {
                       return "Email Must Be filled";
-                    }
-                   else if(!GetUtils.isEmail(controller.email.text)) {
+                    } else if (!GetUtils.isEmail(controller.email.text)) {
                       return "Invalid Email";
                     }
                   },
@@ -140,7 +122,6 @@ class LoginView extends GetWidget<AuthViewModel> {
               GetBuilder<AuthViewModel>(builder: (logic) {
                 return CustomTextFormField(
                   controller: controller.password,
-
                   textInputType: TextInputType.visiblePassword,
                   hintText: "PASSWORD",
                   iconData: Icons.password,
@@ -154,9 +135,7 @@ class LoginView extends GetWidget<AuthViewModel> {
                       controller.showHidePassword();
                     },
                   ),
-                  onChange: (value) {
-
-                  },
+                  onChange: (value) {},
                   onSave: (value) {
                     controller.password.text = value!;
                   },
@@ -170,10 +149,11 @@ class LoginView extends GetWidget<AuthViewModel> {
               GetBuilder<AuthViewModel>(builder: (logic) {
                 return CustomButton(
                     text: "Login",
+                    inProcess: controller.inProcess,
                     onPressed: () {
                       _formLoginKey.currentState!.save();
                       if (_formLoginKey.currentState!.validate()) {
-
+                        controller.logInWithEmailAndPassword();
                       }
                     });
               }),

@@ -43,7 +43,7 @@ class EditNoteView extends GetWidget<NoteViewModel> {
                 ),
               ),
               TextField(
-                style:textContentTheme(context),
+                style: textContentTheme(context),
                 controller: controller.contentController,
                 decoration: InputDecoration(
                   hintText: "Content",

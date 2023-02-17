@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-import '../../../model/note_model.dart';
-import '../../utils/constance.dart';
+import '../../model/note_model.dart';
+import '../utils/constance.dart';
 
 class DatabaseHelper {
   DatabaseHelper._privateConstructor();
@@ -92,4 +92,5 @@ class DatabaseHelper {
       },
     );
   }
+
 }

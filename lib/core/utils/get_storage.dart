@@ -17,6 +17,11 @@ class BoxStorage{
     return _box.read(key);
   }
 
+  void clear(){
+    _box.erase();
+  }
+
+
 
 
 

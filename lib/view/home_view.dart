@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:notes/core/view_model/auth_view_model.dart';
 import 'package:notes/core/view_model/note_view_model.dart';
 import 'package:notes/view/widgets/alert_dialog.dart';
 import 'package:notes/view/search_bar.dart';
@@ -11,23 +11,27 @@ import 'add_new_note_view.dart';
 import 'note_details_view.dart';
 
 class HomeView extends GetWidget<NoteViewModel> {
- const HomeView({super.key});
-
+  const HomeView({super.key});
 
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme
+          .of(context)
+          .backgroundColor,
       appBar: AppBar(
         title: Text(
           "Home",
           style: textAppBarTheme(context),
         ),
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme
+            .of(context)
+            .backgroundColor,
         centerTitle: true,
-        iconTheme: Theme.of(context).iconTheme,
+        iconTheme: Theme
+            .of(context)
+            .iconTheme,
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -98,7 +102,7 @@ class HomeView extends GetWidget<NoteViewModel> {
           const SizedBox(
             height: 50,
           ),
-           Text(
+          Text(
             "You don't have any Notes",
             style: textAppBarTheme(context),
           ),
@@ -175,7 +179,7 @@ class HomeView extends GetWidget<NoteViewModel> {
                       Expanded(
                         child: Text(
                           controller.noteList[index].content!,
-                           style: textContentTheme(context),
+                          style: textContentTheme(context),
                           maxLines: 6,
                           overflow: TextOverflow.fade,
                         ),
@@ -206,24 +210,32 @@ class HomeView extends GetWidget<NoteViewModel> {
                   child: Column(
                     children: [
                       GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           controller.changeTheme();
                         },
                         child: Row(
                           children: [
-                            Icon(Get.isDarkMode? Icons.sunny:Icons.nightlight),
-                            SizedBox(width: 10,),
-                            Text(Get.isDarkMode? "Light Mode":"Dark Mode",),
-
-                            // TextButton(
-                            //     onPressed: () {
-                            //       controller.changeTheme();
-                            //     },
-                            //     ///TODO CHANGE IT
-                            //     child: ),
+                            Icon(Get.isDarkMode ? Icons.sunny : Icons
+                                .nightlight),
+                            const SizedBox(width: 10,),
+                            Text(Get.isDarkMode ? "Light Mode" : "Dark Mode",),
                           ],
                         ),
                       ),
+                      SizedBox(height: 20,),
+                      GetBuilder<AuthViewModel>(
+                        init: AuthViewModel(),
+                          builder: (logic) {
+
+                        return GestureDetector(
+                          onTap: () {
+                            controller.noteList.clear();
+                            logic.signOut();
+
+                          },
+                          child:  Text("signOut",),
+                        );
+                      }),
                     ],
                   ),
                 ),

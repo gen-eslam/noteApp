@@ -42,11 +42,12 @@ dependencies:
   http: ^0.13.5
   google_fonts: ^4.0.3
   path_provider: ^2.0.12
-  intl: ^0.18.0
+  intl: ^0.17.0
   string_stats: ^0.1.0
   share: ^2.0.4
   lottie: ^2.2.0
   get_it: ^7.2.0
+  supabase_flutter: ^1.4.0
 
 dev_dependencies:
   flutter_test:

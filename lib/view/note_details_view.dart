@@ -11,6 +11,7 @@ import '../core/themes/theme.dart';
 class NoteDetailView extends StatelessWidget {
   final NoteViewModel controller = Get.find();
 
+
   NoteDetailView({super.key});
 
   @override
@@ -212,8 +213,10 @@ class NoteDetailView extends StatelessWidget {
                   const SizedBox(
                     height: 15,
                   ),
+
                   SelectableText(
                     controller.noteList[i].content!,
+                    toolbarOptions:const ToolbarOptions(copy: true,cut: true,selectAll: true,),
                     style: textContentTheme(context).copyWith(
                       fontSize: 20,
                     ),

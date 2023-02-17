@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:notes/core/helper/database_services/database_helper.dart';
+import 'package:notes/core/helper/database_helper.dart';
 import 'package:share/share.dart';
 import 'package:string_stats/string_stats.dart';
 

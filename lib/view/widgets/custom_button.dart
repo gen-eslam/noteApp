@@ -3,16 +3,18 @@ import 'package:notes/core/themes/theme.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
+  final bool inProcess;
   Function()? onPressed;
 
   CustomButton({super.key,
     required this.text,
     required this.onPressed,
+    this.inProcess =false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return inProcess ?const Center(child:  CircularProgressIndicator(color: pinkClr,)): Container(
         margin: const EdgeInsets.symmetric(vertical: 20,horizontal: 10),
         decoration: const BoxDecoration(
           // color: Colors.red,

@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:notes/core/helper/online_database_helper.dart';
 import 'package:notes/core/themes/theme_services.dart';
 import 'package:notes/core/themes/theme.dart';
+import 'package:notes/core/utils/constance.dart';
+import 'package:notes/core/utils/get_storage.dart';
 import 'package:notes/view/auth/login_view.dart';
-
+import 'package:notes/view/home_view.dart';
 import 'core/bindings/bindings.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await OnlineDataBase.init();
   await GetStorage.init();
 
 
-  runApp( MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -26,7 +30,7 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemesApp.dark,
       initialBinding: Binding(),
         themeMode: ThemeService().theme,
-      home: LoginView(),
+      home: BoxStorage().getString(Constance.userId)== null ? LoginView():const HomeView(),
     );
   }
 }
