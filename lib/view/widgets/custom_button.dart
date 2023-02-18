@@ -14,7 +14,10 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return inProcess ?const Center(child:  CircularProgressIndicator(color: pinkClr,)): Container(
+    return inProcess ? Center(
+        child:  Container(
+          margin:const EdgeInsets.all(20),
+            child:const CircularProgressIndicator(color: pinkClr,))): Container(
         margin: const EdgeInsets.symmetric(vertical: 20,horizontal: 10),
         decoration: const BoxDecoration(
           // color: Colors.red,

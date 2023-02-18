@@ -112,90 +112,88 @@ class HomeView extends GetWidget<NoteViewModel> {
   }
 
   Widget _viewNotes() {
-    return Scrollbar(
-      child: Container(
-        padding: const EdgeInsets.only(
-          top: 10,
-          right: 10,
-          left: 10,
+    return Container(
+      padding: const EdgeInsets.only(
+        top: 10,
+        right: 10,
+        left: 10,
+      ),
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 20.0,
+          crossAxisSpacing: 15.0,
+          childAspectRatio: 1,
         ),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 20.0,
-            crossAxisSpacing: 15.0,
-            childAspectRatio: 1,
-          ),
-          itemCount: controller.noteList.length,
-          itemBuilder: (BuildContext context, int index) {
-            return GestureDetector(
-                onTap: () {
-                  Get.to(NoteDetailView(), arguments: index);
-                },
-                onLongPress: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialogWidget(
-                        contentText:
-                        "Are you sure you want to delete the note?",
-                        confirmFunction: () {
-                          controller
-                              .deleteNote(controller.noteList[index].noteId!);
-                          Get.back();
-                        },
-                        declineFunction: () {
-                          Get.back();
-                        },
-                      );
-                    },
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: customListColor(index),
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                            color: customListColor(index).withOpacity(0.5),
-                            offset: const Offset(3, 3),
-                            blurRadius: 10)
-                      ]),
-                  padding: const EdgeInsets.all(15),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        controller.noteList[index].title!,
-                        style: textTitleTheme(context),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: false,
+        itemCount: controller.noteList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return GestureDetector(
+              onTap: () {
+                Get.to(NoteDetailView(), arguments: index);
+              },
+              onLongPress: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialogWidget(
+                      contentText:
+                      "Are you sure you want to delete the note?",
+                      confirmFunction: () {
+                        controller
+                            .deleteNote(controller.noteList[index].noteId!);
+                        Get.back();
+                      },
+                      declineFunction: () {
+                        Get.back();
+                      },
+                    );
+                  },
+                );
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                    color: customListColor(index),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                          color: customListColor(index).withOpacity(0.5),
+                          offset: const Offset(3, 3),
+                          blurRadius: 10)
+                    ]),
+                padding: const EdgeInsets.all(15),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      controller.noteList[index].title!,
+                      style: textTitleTheme(context),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Expanded(
+                      child: Text(
+                        controller.noteList[index].content!,
+                        style: textContentTheme(context),
+                        maxLines: 6,
+                        overflow: TextOverflow.fade,
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Expanded(
-                        child: Text(
-                          controller.noteList[index].content!,
-                          style: textContentTheme(context),
-                          maxLines: 6,
-                          overflow: TextOverflow.fade,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        controller.noteList[index].dateTimeEdited!,
-                        style: textOverLineTheme(context),
-                      ),
-                    ],
-                  ),
-                ));
-          },
-        ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      controller.noteList[index].dateTimeEdited!,
+                      style: textOverLineTheme(context),
+                    ),
+                  ],
+                ),
+              ));
+        },
       ),
     );
   }
@@ -233,7 +231,7 @@ class HomeView extends GetWidget<NoteViewModel> {
                             logic.signOut();
 
                           },
-                          child:  Text("signOut",),
+                          child:  Text("signout",),
                         );
                       }),
                     ],

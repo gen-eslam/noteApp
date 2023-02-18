@@ -6,8 +6,8 @@ import '../view_model/note_view_model.dart';
 class Binding implements Bindings{
   @override
   void dependencies() {
-    Get.lazyPut(() => AuthViewModel());
-    Get.lazyPut(() => NoteViewModel());
+    Get.lazyPut(() => AuthViewModel(),fenix: true);
+    Get.lazyPut(() => NoteViewModel(),fenix: true);
   }
 
 }

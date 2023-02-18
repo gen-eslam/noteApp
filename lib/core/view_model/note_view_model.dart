@@ -10,7 +10,6 @@ import '../themes/theme_services.dart';
 import '../utils/constance.dart';
 
 class NoteViewModel extends GetxController {
-  /// TODO save title and content get box
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
   List<Note> noteList = [];

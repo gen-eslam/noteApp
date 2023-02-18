@@ -98,7 +98,9 @@ class LoginView extends GetWidget<AuthViewModel> {
                   ],
                 ),
               ),
-              GetBuilder<AuthViewModel>(builder: (logic) {
+              GetBuilder<AuthViewModel>(
+                init: AuthViewModel(),
+                  builder: (logic) {
                 return CustomTextFormField(
                   controller: controller.email,
                   textInputType: TextInputType.emailAddress,
