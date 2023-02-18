@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:notes/core/helper/database_helper.dart';
+import 'package:notes/core/utils/get_storage.dart';
 import 'package:share/share.dart';
 import 'package:string_stats/string_stats.dart';
 
@@ -13,14 +14,17 @@ class NoteViewModel extends GetxController {
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
   List<Note> noteList = [];
+  late final String drawerText;
 
   int contentWordCount = 0, contentCharCount = 0;
 
   @override
   void onInit() {
+   drawerText = getTextFromBoxStorage();
     getAllNotes();
     super.onInit();
   }
+
   @override
   void onReady() {
     super.onReady();
@@ -33,7 +37,7 @@ class NoteViewModel extends GetxController {
   Future<void> addNoteToDatabase() async {
     String title = titleController.text;
     String content = contentController.text;
-    title.trim().isEmpty ?title ="unNamed" :title;
+    title.trim().isEmpty ? title = "unNamed" : title;
     Note note = Note(
       title: title,
       content: content,
@@ -49,8 +53,8 @@ class NoteViewModel extends GetxController {
     Get.back();
   }
 
-  Future<void> deleteNote(int noteId) async {
-    await DatabaseHelper.instance.deleteNote(noteId);
+  Future<void> deleteNote(Note note) async {
+    await DatabaseHelper.instance.deleteNote(note);
     getAllNotes();
   }
 
@@ -58,14 +62,15 @@ class NoteViewModel extends GetxController {
     await DatabaseHelper.instance.deleteAllNotes();
     getAllNotes();
   }
-  Future<void> updateNote(int id ,String dateCreated)async{
+
+  Future<void> updateNote(int id, String dateCreated) async {
     String title = titleController.text;
     String content = contentController.text;
     Note note = Note(
       noteId: id,
       title: title,
       content: content,
-      dateTimeCreated:dateCreated,
+      dateTimeCreated: dateCreated,
       dateTimeEdited: DateFormat(Constance.dateFormat).format(DateTime.now()),
     );
 
@@ -78,23 +83,29 @@ class NoteViewModel extends GetxController {
     Get.back();
   }
 
-  Future<void> getAllNotes()async {
+  Future<void> getAllNotes() async {
     noteList = await DatabaseHelper.instance.getNoteList();
     update();
   }
 
-  void shareNote(String title,String content){
-      Share.share("$title \n $content \n created my gen");
+  void shareNote(String title, String content) {
+    Share.share("$title \n $content \n created my gen");
   }
-  void clearAddNote(){
-    titleController.text ="";
-    contentController.text="";
+
+  void clearAddNote() {
+    titleController.text = "";
+    contentController.text = "";
     Get.back();
-
   }
 
+  String getTextFromBoxStorage() {
+    if (BoxStorage().getString(Constance.userId) != null) {
+      return "Welcome \n ${BoxStorage().getString(Constance.userName)}";
+    }
+    return "Welcome";
+  }
 
-  void changeTheme(){
+  void changeTheme() {
     ThemeService().switchTheme();
     update();
   }

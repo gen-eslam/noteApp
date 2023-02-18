@@ -7,31 +7,22 @@ import 'package:notes/view/widgets/alert_dialog.dart';
 import 'package:notes/view/search_bar.dart';
 
 import '../core/themes/theme.dart';
+import '../core/utils/constance.dart';
 import 'add_new_note_view.dart';
 import 'note_details_view.dart';
 
 class HomeView extends GetWidget<NoteViewModel> {
   const HomeView({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme
-          .of(context)
-          .backgroundColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-        title: Text(
-          "Home",
-          style: textAppBarTheme(context),
-        ),
-        backgroundColor: Theme
-            .of(context)
-            .backgroundColor,
+        title: Constance.appText(context),
+        backgroundColor: Theme.of(context).backgroundColor,
         centerTitle: true,
-        iconTheme: Theme
-            .of(context)
-            .iconTheme,
+        iconTheme: Theme.of(context).iconTheme,
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -46,8 +37,7 @@ class HomeView extends GetWidget<NoteViewModel> {
                   context: context,
                   builder: (context) {
                     return AlertDialogWidget(
-                      contentText:
-                      "Are you sure you want to delete all notes?",
+                      contentText: "Are you sure you want to delete all notes?",
                       confirmFunction: () {
                         controller.deleteAllNote();
                         Get.back();
@@ -60,13 +50,11 @@ class HomeView extends GetWidget<NoteViewModel> {
                 );
               }
             },
-            itemBuilder: (context) =>
-            [
+            itemBuilder: (context) => [
               const PopupMenuItem(
                 value: 0,
                 child: Text(
                   "Delete All Notes",
-
                 ),
               )
             ],
@@ -75,11 +63,9 @@ class HomeView extends GetWidget<NoteViewModel> {
       ),
       body: GetBuilder<NoteViewModel>(
         builder: (_) =>
-        controller.isEmpty()
-            ? _emptyNotes(context)
-            : _viewNotes(),
+            controller.isEmpty() ? _emptyNotes(context) : _viewNotes(),
       ),
-      drawer: _drawer(),
+      drawer: _drawer(context),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Get.to(() => const AddNewNoteView());
@@ -136,11 +122,10 @@ class HomeView extends GetWidget<NoteViewModel> {
                   context: context,
                   builder: (context) {
                     return AlertDialogWidget(
-                      contentText:
-                      "Are you sure you want to delete the note?",
+                      contentText: "Are you sure you want to delete the note?",
                       confirmFunction: () {
                         controller
-                            .deleteNote(controller.noteList[index].noteId!);
+                            .deleteNote(controller.noteList[index]);
                         Get.back();
                       },
                       declineFunction: () {
@@ -198,46 +183,74 @@ class HomeView extends GetWidget<NoteViewModel> {
     );
   }
 
-  Widget _drawer() {
-    return GetBuilder<NoteViewModel>(
-        builder: (controller) {
-          return Drawer(
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          controller.changeTheme();
-                        },
-                        child: Row(
-                          children: [
-                            Icon(Get.isDarkMode ? Icons.sunny : Icons
-                                .nightlight),
-                            const SizedBox(width: 10,),
-                            Text(Get.isDarkMode ? "Light Mode" : "Dark Mode",),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 20,),
-                      GetBuilder<AuthViewModel>(
-                        init: AuthViewModel(),
-                          builder: (logic) {
-
-                        return GestureDetector(
-                          onTap: () {
-                            controller.noteList.clear();
-                            logic.signOut();
-
-                          },
-                          child:  Text("signout",),
-                        );
-                      }),
-                    ],
-                  ),
+  Widget _drawer(BuildContext context) {
+    return GetBuilder<NoteViewModel>(builder: (controller) {
+      return Drawer(
+          child: SafeArea(
+        minimum: const EdgeInsets.only(bottom: 30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              height: 120,
+              alignment: AlignmentDirectional.center,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: const BorderRadius.only(
+                  bottomRight: Radius.circular(50),
                 ),
-              ));
-        });
+              ),
+              child: Text(
+                controller.drawerText,
+                textAlign: TextAlign.center,
+                style: textContentTheme(context).copyWith(
+                  color: offWhite,
+                ),
+              ),
+            ),
+           const SizedBox(height: 30,),
+            Expanded(
+              child: Column(
+                children:
+                [
+                  GestureDetector(
+                    onTap: () {
+                      controller.changeTheme();
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Get.isDarkMode ? Icons.sunny : Icons.nightlight),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          Get.isDarkMode ? "Light Mode" : "Dark Mode",
+                        ),
+                      ],
+                    ),
+                  ),
+
+                ],
+              ),
+            ),
+            GetBuilder<AuthViewModel>(
+                init: AuthViewModel(),
+                builder: (logic) {
+                  return GestureDetector(
+                    onTap: () {
+                      controller.noteList.clear();
+                      logic.signOut();
+                    },
+                    child: const Text(
+                      "sign-out",style: TextStyle(color: pinkClr),
+                    ),
+                  );
+                }),
+          ],
+        ),
+      ));
+    });
   }
 }

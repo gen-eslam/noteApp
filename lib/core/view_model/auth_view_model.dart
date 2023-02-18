@@ -49,7 +49,7 @@ class AuthViewModel extends GetxController {
         .signInWithEmail(email: email.text, password: password.text)
         .then((value) {
       print("success");
-      putDataFromBoxStorage(name:name.text,email:email.text,id: value.user!.id);
+      putDataFromBoxStorage(name:value.user!.userMetadata!["name"],email:email.text,id: value.user!.id);
       inProcess = false;
       update();
       clearController();
@@ -92,7 +92,6 @@ class AuthViewModel extends GetxController {
     } else {
       suffixConfirmPassIcon = null;
     }
-    // print(isNotEqual);
     update();
   }
 

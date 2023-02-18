@@ -57,7 +57,7 @@ class NoteDetailView extends StatelessWidget {
                                     "Are you sure you want to delete the note?",
                                 confirmFunction: () {
                                   controller.deleteNote(
-                                      controller.noteList[i].noteId!);
+                                      controller.noteList[i]);
                                   Get.offAll(const HomeView());
                                 },
                                 declineFunction: () {

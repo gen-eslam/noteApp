@@ -23,6 +23,14 @@ class Constance {
         ),
       );
 
+
+  /// database Status
+  static String dataStatus = "status";
+  static String dataAdd = "add";
+  static String dataUpdate = "update";
+  static String dataDelete = "delete";
+
+
   /// user model
   static String userId = "id";
   static String userName = "name";

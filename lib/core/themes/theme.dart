@@ -16,7 +16,7 @@ class ThemesApp {
     backgroundColor: offWhite,
     drawerTheme: DrawerThemeData(
       backgroundColor: offWhite,
-      width: Get.width / 2,
+      width: Get.width/2,
     ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: bluishClr,
@@ -55,7 +55,7 @@ class ThemesApp {
     ),
     drawerTheme: DrawerThemeData(
       backgroundColor: darkGreyClr,
-      width: Get.width / 2,
+      width: Get.width/2,
     ),
     textTheme: TextTheme(
       headline6: GoogleFonts.roboto(),

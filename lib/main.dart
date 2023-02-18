@@ -15,12 +15,12 @@ void main() async {
   await OnlineDataBase.init();
   await GetStorage.init();
 
-
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-   MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -29,8 +29,11 @@ class MyApp extends StatelessWidget {
       theme: ThemesApp.light,
       darkTheme: ThemesApp.dark,
       initialBinding: Binding(),
-        themeMode: ThemeService().theme,
-      home: BoxStorage().getString(Constance.userId)== null ? LoginView():const HomeView(),
+      themeMode: ThemeService().theme,
+      home: BoxStorage().getString(Constance.userId) == null &&
+              BoxStorage().getString(Constance.offLineMode) == null
+          ? LoginView()
+          : const HomeView(),
     );
   }
 }
