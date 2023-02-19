@@ -37,7 +37,7 @@ class SignUpView extends GetWidget<AuthViewModel> {
         icon: Icon(Icons.arrow_back_ios),
         color: pinkClr,
       ),
-      title: Constance.appText(context),
+      title: Constance.appText(context,"Note"," App"),
       actions: [
         IconButton(
           onPressed: () {

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:notes/core/view_model/auth_view_model.dart';
 import 'package:notes/core/view_model/note_view_model.dart';
+import 'package:notes/view/sync_data.dart';
 import 'package:notes/view/widgets/alert_dialog.dart';
 import 'package:notes/view/search_bar.dart';
 
@@ -19,7 +20,7 @@ class HomeView extends GetWidget<NoteViewModel> {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-        title: Constance.appText(context),
+        title: Constance.appText(context,"Note"," App"),
         backgroundColor: Theme.of(context).backgroundColor,
         centerTitle: true,
         iconTheme: Theme.of(context).iconTheme,
@@ -84,6 +85,7 @@ class HomeView extends GetWidget<NoteViewModel> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+
           Lottie.asset('assets/note.json'),
           const SizedBox(
             height: 50,
@@ -230,6 +232,13 @@ class HomeView extends GetWidget<NoteViewModel> {
                         ),
                       ],
                     ),
+                  ),
+                  SizedBox(height: 20,),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(SyncData());
+                    },
+                    child: Text("sync data screen"),
                   ),
 
                 ],

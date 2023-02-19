@@ -4,16 +4,16 @@ import '../themes/theme.dart';
 
 class Constance {
   /// App Name
-  static Widget appText(context) => RichText(
+  static Widget appText(context,String title,String title2) => RichText(
         text: TextSpan(
-          text: "Note",
+          text: title,
           style: textAppBarTheme(context).copyWith(
             letterSpacing: 2.5,
             color: bluishClr,
           ),
           children: [
             TextSpan(
-              text: " App",
+              text: title2,
               style: textAppBarTheme(context).copyWith(
                 letterSpacing: 2.5,
                 color: pinkClr,

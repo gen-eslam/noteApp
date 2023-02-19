@@ -24,7 +24,7 @@ class LoginView extends GetWidget<AuthViewModel> {
   AppBar _appBar(BuildContext context) {
     return AppBar(
       centerTitle: true,
-      title: Constance.appText(context),
+      title: Constance.appText(context,"Note"," App"),
       actions: [
         IconButton(
           onPressed: () {
