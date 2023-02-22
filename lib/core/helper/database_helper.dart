@@ -108,6 +108,9 @@ class DatabaseHelper {
 
   Future<void> deleteNote(Note note) async {
     Database? db = await instance.database;
+    if(note.syncDataStatus == SyncDataStatus.synced.name){
+      await addModifiedData(id: note.noteId!, status: DataStatus.delete.name);
+    }
      await db!.delete(
       _tableName,
       where: "${Constance.noteId} = ?",
@@ -125,7 +128,7 @@ class DatabaseHelper {
   Future<int> updateNote(Note note) async {
     Database? db = await instance.database;
     if(note.syncDataStatus == SyncDataStatus.synced.name){
-
+      await addModifiedData(id: note.noteId!,status: DataStatus.update.name);
     }
     return await db!.update(
       _tableName,
@@ -134,6 +137,7 @@ class DatabaseHelper {
       whereArgs: [note.noteId],
     );
   }
+
   Future<int> updateSyncedNote(Note note) async {
     Database? db = await instance.database;
     return await db!.update(

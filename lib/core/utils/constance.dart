@@ -64,3 +64,7 @@ enum SyncDataStatus{
 synced,
 unSynced
 }
+enum DataStatus{
+  update,
+  delete
+}
