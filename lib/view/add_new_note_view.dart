@@ -68,7 +68,7 @@ class AddNewNoteView extends GetWidget<NoteViewModel> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          controller.addNoteToDatabase();
+          controller.addNoteToDatabase(context);
         },
         child: const Icon(
           Icons.check,

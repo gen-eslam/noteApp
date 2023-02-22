@@ -15,7 +15,7 @@ class SyncViewModel extends GetxController{
   }
 
   Future<void> getData()async{
-    _note = await databaseHelper.getNoteListOnlineData();
+     _note = await databaseHelper.getNoteUnSyncList();
     print(_note);
     update();
   }

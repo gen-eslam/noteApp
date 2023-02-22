@@ -4,6 +4,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../model/note_model.dart';
+import '../../model/synced_data_model.dart';
 import '../utils/constance.dart';
 
 class DatabaseHelper {
@@ -29,33 +30,30 @@ class DatabaseHelper {
     String path = join(directory.path, _dbName);
     return await openDatabase(path, version: _dbVersion, onCreate: _onCreate);
   }
-
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE $_tableName(
-        ${Constance.noteId} INTEGER PRIMARY KEY,
-        ${Constance.noteTitle} TEXT NOT NULL,
-        ${Constance.noteContent} TEXT NOT NULL,
-        ${Constance.noteDateTimeCreated} TEXT NOT NULL,
-        ${Constance.noteDateTimeEdited} TEXT NOT NULL
-      )
-      ''');
-    await db.execute('''
-          CREATE TABLE $_syncDatabase(
-       ${Constance.noteId} INTEGER,
+        ${Constance.noteId} INTEGER PRIMARY KEY autoincrement,
         ${Constance.noteTitle} TEXT NOT NULL,
         ${Constance.noteContent} TEXT NOT NULL,
         ${Constance.noteDateTimeCreated} TEXT NOT NULL,
         ${Constance.noteDateTimeEdited} TEXT NOT NULL,
+        ${Constance.syncDataStatus} TEXT NOT NULL
+        )
+      ''');
+    await db.execute('''
+          CREATE TABLE $_syncDatabase(
+       ${Constance.noteId} INTEGER,
         ${Constance.dataStatus} TEXT NOT NULL
       )
         ''');
+    print("created data done");
   }
-
-  Future<List<Note>> getNoteListOnlineData() async {
+  Future<List<Note>> getNoteList() async {
     Database? db = await instance.database;
-    final List<Map<String, dynamic>> maps = await db!.query(_syncDatabase);
+    final List<Map<String, dynamic>> maps = await db!.query(_tableName);
     print(maps);
+
     return List.generate(
       maps.length,
           (index) {
@@ -65,71 +63,52 @@ class DatabaseHelper {
           content: maps[index][Constance.noteContent],
           dateTimeEdited: maps[index][Constance.noteDateTimeEdited],
           dateTimeCreated: maps[index][Constance.noteDateTimeCreated],
-          status: maps[index][Constance.dataStatus],
+          syncDataStatus: maps[index][Constance.syncDataStatus]
+        );
+      },
+    );
+  }
+  Future<List<Note>> getNoteUnSyncList() async {
+    Database? db = await instance.database;
+    final List<Map<String, dynamic>> maps = await db!.query(_tableName,where:"${Constance.syncDataStatus} = ?", whereArgs: [SyncDataStatus.unSynced.name]);
+
+    return List.generate(
+      maps.length,
+          (index) {
+        return Note(
+          noteId: maps[index][Constance.noteId],
+          title: maps[index][Constance.noteTitle],
+          content: maps[index][Constance.noteContent],
+          dateTimeEdited: maps[index][Constance.noteDateTimeEdited],
+          dateTimeCreated: maps[index][Constance.noteDateTimeCreated],
+          syncDataStatus: maps[index][Constance.syncDataStatus],
+
         );
       },
     );
   }
 
-  Future<List<Map<String, dynamic>>> getLastAddedRecord() async {
-    Database? db = await instance.database;
-    return db!.rawQuery(
-        "SELECT * FROM $_tableName ORDER BY ${Constance.noteId} DESC LIMIT 1");
-  }
 
 
-
-  // Add Note
   Future<void> addNote(Note note) async {
     Database? db = await instance.database;
      await db!.insert(_tableName, note.toJson());
-    List<Map<String, dynamic>> listResult = await getLastAddedRecord();
-    await db.insert(_syncDatabase, {
-      Constance.noteId: listResult[0][Constance.noteId],
-      Constance.noteTitle: listResult[0][Constance.noteTitle],
-      Constance.noteContent: listResult[0][Constance.noteContent],
-      Constance.noteDateTimeCreated: listResult[0]
-          [Constance.noteDateTimeCreated],
-      Constance.noteDateTimeEdited: listResult[0][Constance.noteDateTimeEdited],
-      Constance.dataStatus: Constance.dataAdd,
-    });
+  }
+  Future<void> addModifiedData({required int id, required String status}) async {
+    Database? db = await instance.database;
+    SyncedData syncedData = SyncedData(id: id,dataStatus: status);
+     await db!.insert(_syncDatabase, syncedData.toJson());
   }
 
   Future<bool> findRecord(int noteId)async{
     Database? db = await instance.database;
     List<Map<String, Object?>> result = await db!.rawQuery("SELECT * FROM $_syncDatabase WHERE ${Constance.noteId} = $noteId");
     return result.isNotEmpty;
-
-
   }
 
-  // Delete Note
   Future<void> deleteNote(Note note) async {
     Database? db = await instance.database;
-    if(await findRecord(note.noteId!)){
-      await db!.update(_syncDatabase,{
-        Constance.noteId: note.noteId,
-        Constance.noteTitle: note.title,
-        Constance.noteContent: note.content,
-        Constance.noteDateTimeCreated: note.dateTimeCreated,
-        Constance.noteDateTimeEdited: note.dateTimeEdited,
-        Constance.dataStatus: Constance.dataDelete,
-      },
-        where: "${Constance.noteId} = ?",
-        whereArgs: [note.noteId],
-      );
-    }else{
-     await db!.insert(_syncDatabase,{
-        Constance.noteId: note.noteId,
-        Constance.noteTitle: note.title,
-        Constance.noteContent: note.content,
-        Constance.noteDateTimeCreated: note.dateTimeCreated,
-        Constance.noteDateTimeEdited: note.dateTimeEdited,
-        Constance.dataStatus: Constance.dataDelete,
-
-    });
-    }
-     await db.delete(
+     await db!.delete(
       _tableName,
       where: "${Constance.noteId} = ?",
       whereArgs: [note.noteId],
@@ -138,20 +117,16 @@ class DatabaseHelper {
 
 
 
-  // Delete All Notes
   Future<int> deleteAllNotes() async {
     Database? db = await instance.database;
-    List<Note> notes = await getNoteList();
-    for (Note item in notes) {
-      deleteOnlineDatabaseNotes(item);
-    }
     return await db!.delete(_tableName);
   }
 
-  // Update Note
   Future<int> updateNote(Note note) async {
     Database? db = await instance.database;
-    await updateOnlineDatabaseNotes(note);
+    if(note.syncDataStatus == SyncDataStatus.synced.name){
+
+    }
     return await db!.update(
       _tableName,
       note.toJson(),
@@ -159,93 +134,25 @@ class DatabaseHelper {
       whereArgs: [note.noteId],
     );
   }
-
-  Future<List<Note>> getNoteList() async {
+  Future<int> updateSyncedNote(Note note) async {
     Database? db = await instance.database;
-    final List<Map<String, dynamic>> maps = await db!.query(_tableName);
-
-    return List.generate(
-      maps.length,
-      (index) {
-        return Note(
-          noteId: maps[index][Constance.noteId],
-          title: maps[index][Constance.noteTitle],
-          content: maps[index][Constance.noteContent],
-          dateTimeEdited: maps[index][Constance.noteDateTimeEdited],
-          dateTimeCreated: maps[index][Constance.noteDateTimeCreated],
-        );
-      },
-    );
-  }
-
-
-  Future<int> addOnlineData(Note note, String status) async {
-    Database? db = await instance.database;
-    return await db!.insert(_syncDatabase, {
-      Constance.noteId: note.noteId,
-      Constance.noteTitle: note.title,
-      Constance.noteContent: note.content,
-      Constance.noteDateTimeCreated: note.dateTimeCreated,
-      Constance.noteDateTimeEdited: note.dateTimeEdited,
-      Constance.dataStatus: status,
-    });
-  }
-
-  Future<int> deleteAllOnlineDatabaseNotes() async {
-    Database? db = await instance.database;
-    return await db!.delete(_syncDatabase);
-  }
-
-  Future<bool> findInOnlineDatabase(int noteId) async {
-    Database? db = await instance.database;
-    List<Map<String, Object?>> _find = await db!.query(
-      _syncDatabase,
-      columns: [Constance.noteId],
+    return await db!.update(
+      _tableName,
+      note.toJson(syncDataStatus: SyncDataStatus.synced),
       where: "${Constance.noteId} = ?",
-      whereArgs: [noteId],
+      whereArgs: [note.noteId],
     );
-    return _find.isEmpty;
   }
 
-  Future<void> updateOnlineDatabaseNotes(Note note) async {
-    Database? db = await instance.database;
-    if (await findInOnlineDatabase(note.noteId!)) {
-      await addOnlineData(note, Constance.dataUpdate);
-    } else {
-      await db!.update(
-        _syncDatabase,
-        {
-          Constance.noteId: note.noteId,
-          Constance.noteTitle: note.title,
-          Constance.noteContent: note.content,
-          Constance.noteDateTimeCreated: note.dateTimeCreated,
-          Constance.noteDateTimeEdited: note.dateTimeEdited,
-          Constance.dataStatus: Constance.dataUpdate,
-        },
-        where: "${Constance.noteId} = ?",
-        whereArgs: [note.noteId],
-      );
-    }
-  }
 
-  Future<void> deleteOnlineDatabaseNotes(Note note) async {
-    Database? db = await instance.database;
-    if (await findInOnlineDatabase(note.noteId!)) {
-      await addOnlineData(note, Constance.dataDelete);
-    } else {
-      await db!.update(
-        _syncDatabase,
-        {
-          Constance.noteId: note.noteId,
-          Constance.noteTitle: note.title,
-          Constance.noteContent: note.content,
-          Constance.noteDateTimeCreated: note.dateTimeCreated,
-          Constance.noteDateTimeEdited: note.dateTimeEdited,
-          Constance.dataStatus: Constance.dataDelete,
-        },
-        where: "${Constance.noteId} = ?",
-        whereArgs: [note.noteId],
-      );
-    }
-  }
+
+
+
+
+
+
+
+
+
+
 }

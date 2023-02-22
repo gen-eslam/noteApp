@@ -59,7 +59,7 @@ class SyncData extends GetWidget<SyncViewModel> {
                           ),),
                       ),
                       RotatedBox(quarterTurns: 3,
-                        child: Text(controller.note[index].status!),
+                        child: Text(controller.note[index].noteId.toString()),
                       )
                     ],
                   ),

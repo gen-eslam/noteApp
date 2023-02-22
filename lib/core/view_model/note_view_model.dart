@@ -34,7 +34,7 @@ class NoteViewModel extends GetxController {
     return noteList.isEmpty;
   }
 
-  Future<void> addNoteToDatabase() async {
+  Future<void> addNoteToDatabase(BuildContext context) async {
     String title = titleController.text;
     String content = contentController.text;
     title.trim().isEmpty ? title = "unNamed" : title;
@@ -49,6 +49,7 @@ class NoteViewModel extends GetxController {
     contentController.text = "";
     contentWordCount = wordCount(content);
     contentCharCount = charCount(content);
+    FocusScope.of(context).unfocus();
     getAllNotes();
     Get.back();
   }
@@ -85,6 +86,7 @@ class NoteViewModel extends GetxController {
 
   Future<void> getAllNotes() async {
     noteList = await DatabaseHelper.instance.getNoteList();
+    print(noteList);
     update();
   }
 

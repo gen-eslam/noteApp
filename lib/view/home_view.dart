@@ -80,8 +80,10 @@ class HomeView extends GetWidget<NoteViewModel> {
   }
 
   Widget _emptyNotes(BuildContext context) {
-    return Padding(
+    return SingleChildScrollView(
+      physics:const NeverScrollableScrollPhysics(),
       padding: const EdgeInsets.all(10),
+
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

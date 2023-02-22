@@ -2,7 +2,7 @@ import '../core/utils/constance.dart';
 
 class Note {
   int? noteId;
-  String? title, content, dateTimeEdited, dateTimeCreated, status;
+  String? title, content, dateTimeEdited, dateTimeCreated, syncDataStatus;
 
   Note({
     this.noteId,
@@ -10,7 +10,7 @@ class Note {
     this.title,
     this.dateTimeCreated,
     this.dateTimeEdited,
-    this.status,
+    this.syncDataStatus,
   });
 
   factory Note.fromJson(Map<dynamic, dynamic> json) => Note(
@@ -19,36 +19,17 @@ class Note {
         noteId: json[Constance.noteId],
         dateTimeCreated: json[Constance.noteDateTimeCreated],
         dateTimeEdited: json[Constance.noteDateTimeEdited],
+        syncDataStatus: json[Constance.syncDataStatus],
       );
 
-
-
-  toJson() {
+  toJson({SyncDataStatus syncDataStatus = SyncDataStatus.unSynced}) {
     return {
       Constance.noteId: noteId,
       Constance.noteTitle: title,
       Constance.noteContent: content,
       Constance.noteDateTimeCreated: dateTimeCreated,
       Constance.noteDateTimeEdited: dateTimeEdited,
-    };
-  }
-  factory Note.fromOnlineDataBaseJson(Map<dynamic, dynamic> json) => Note(
-    title: json[Constance.noteTitle],
-    content: json[Constance.noteContent],
-    noteId: json[Constance.noteId],
-    dateTimeCreated: json[Constance.noteDateTimeCreated],
-    dateTimeEdited: json[Constance.noteDateTimeEdited],
-    status: json[Constance.dataStatus],
-  );
-
-  toOnlineDataBaseJson() {
-    return {
-      Constance.noteId: noteId,
-      Constance.noteTitle: title,
-      Constance.noteContent: content,
-      Constance.noteDateTimeCreated: dateTimeCreated,
-      Constance.noteDateTimeEdited: dateTimeEdited,
-      Constance.dataStatus: status,
+      Constance.syncDataStatus: syncDataStatus.name.toString(),
     };
   }
 }
