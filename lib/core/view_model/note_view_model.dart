@@ -7,10 +7,12 @@ import 'package:share/share.dart';
 import 'package:string_stats/string_stats.dart';
 
 import '../../model/note_model.dart';
+import '../helper/online_database_helper.dart';
 import '../themes/theme_services.dart';
 import '../utils/constance.dart';
 
 class NoteViewModel extends GetxController {
+  final OnlineDataBase _onlineDataBase = OnlineDataBase();
   TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
   List<Note> noteList = [];
@@ -21,6 +23,7 @@ class NoteViewModel extends GetxController {
   @override
   void onInit() {
    drawerText = getTextFromBoxStorage();
+   _onlineDataBase.getAllOnlineData();
     getAllNotes();
     super.onInit();
   }

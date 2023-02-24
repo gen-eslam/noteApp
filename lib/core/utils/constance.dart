@@ -55,6 +55,7 @@ class Constance {
   static String signedIn = "signedIn";
 
   ///supabase
+  static String onlineDatabaseName = "note";
   static String onlineDatabaseUrl = "https://ulmzuhhpiommsyckieop.supabase.co";
   static String apiKey =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVsbXp1aGhwaW9tbXN5Y2tpZW9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzYzMDE3OTksImV4cCI6MTk5MTg3Nzc5OX0.Q8io31bIaIpytj8Lq1-TfqU3B_kxQdW0r8tTfZs0Y-M";

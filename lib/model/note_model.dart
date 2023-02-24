@@ -1,3 +1,5 @@
+import 'package:notes/core/utils/get_storage.dart';
+
 import '../core/utils/constance.dart';
 
 class Note {
@@ -30,6 +32,16 @@ class Note {
       Constance.noteDateTimeCreated: dateTimeCreated,
       Constance.noteDateTimeEdited: dateTimeEdited,
       Constance.syncDataStatus: syncDataStatus.name.toString(),
+    };
+  }
+  toOnlineData(){
+    return {
+       Constance.userId:BoxStorage().getString(Constance.userId),
+      Constance.noteId: noteId,
+      Constance.noteTitle: title,
+      Constance.noteContent: content,
+      Constance.noteDateTimeCreated: dateTimeCreated,
+      Constance.noteDateTimeEdited: dateTimeEdited,
     };
   }
 }
