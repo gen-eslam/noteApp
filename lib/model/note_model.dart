@@ -4,7 +4,8 @@ import '../core/utils/constance.dart';
 
 class Note {
   int? noteId;
-  String? title, content, dateTimeEdited, dateTimeCreated, syncDataStatus;
+  String? title, content, dateTimeEdited, dateTimeCreated;
+  String syncDataStatus;
 
   Note({
     this.noteId,
@@ -12,7 +13,7 @@ class Note {
     this.title,
     this.dateTimeCreated,
     this.dateTimeEdited,
-    this.syncDataStatus,
+    required this.syncDataStatus,
   });
 
   factory Note.fromJson(Map<dynamic, dynamic> json) => Note(

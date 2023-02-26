@@ -60,7 +60,7 @@ class EditNoteView extends GetWidget<NoteViewModel> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           controller.updateNote(
-              controller.noteList[i].noteId!, controller.noteList[i].dateTimeCreated!);
+              controller.noteList[i].noteId!, controller.noteList[i].dateTimeCreated!,controller.noteList[i].syncDataStatus);
         },
         child:const Icon(Icons.save),
       ),

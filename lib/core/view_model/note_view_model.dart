@@ -46,6 +46,7 @@ class NoteViewModel extends GetxController {
       content: content,
       dateTimeCreated: DateFormat(Constance.dateFormat).format(DateTime.now()),
       dateTimeEdited: DateFormat(Constance.dateFormat).format(DateTime.now()),
+      syncDataStatus: Constance.dataUnSynced
     );
     await DatabaseHelper.instance.addNote(note);
     titleController.text = "";
@@ -67,7 +68,7 @@ class NoteViewModel extends GetxController {
     getAllNotes();
   }
 
-  Future<void> updateNote(int id, String dateCreated) async {
+  Future<void> updateNote(int id, String dateCreated,String syncDataStatus) async {
     String title = titleController.text;
     String content = contentController.text;
     Note note = Note(
@@ -76,6 +77,7 @@ class NoteViewModel extends GetxController {
       content: content,
       dateTimeCreated: dateCreated,
       dateTimeEdited: DateFormat(Constance.dateFormat).format(DateTime.now()),
+      syncDataStatus: syncDataStatus
     );
 
     await DatabaseHelper.instance.updateNote(note);
@@ -89,7 +91,6 @@ class NoteViewModel extends GetxController {
 
   Future<void> getAllNotes() async {
     noteList = await DatabaseHelper.instance.getNoteList();
-    print(noteList);
     update();
   }
 

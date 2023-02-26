@@ -27,10 +27,10 @@ class SyncViewModel extends GetxController{
   void syncData(){
     _note.forEach((note) {
       onlineDataBase.addDataToOnlineDatabase(note);
-      print("dane");
       databaseHelper.updateSyncedNote(note);
     });
-    print("insert doneeeeeeeeeeee");
+
+
   }
 
 

@@ -43,11 +43,11 @@ class OnlineDataBase {
   }
 
   Future<void> getAllOnlineData() async {
-    List<Map<dynamic, dynamic>> noteMap = await supabase
+    List<dynamic> noteMap = await supabase
         .from(Constance.onlineDatabaseName)
         .select(
             "${Constance.noteId},${Constance.noteTitle},${Constance.noteContent},${Constance.noteDateTimeCreated},${Constance.noteDateTimeEdited}")
-        .eq("user_id", BoxStorage().getString(Constance.userId));
+        .eq(Constance.userId, BoxStorage().getString(Constance.userId));
     List<Note> note =
         List.generate(noteMap.length, (index) => Note.fromJson(noteMap[index]));
     print("online data");

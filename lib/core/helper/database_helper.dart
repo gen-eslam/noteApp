@@ -55,6 +55,9 @@ class DatabaseHelper {
     Database? db = await instance.database;
     final List<Map<String, dynamic>> maps = await db!.query(_tableName);
     print(maps);
+    List<Map<dynamic, dynamic>> mod = await db.query(_syncDatabase);
+    print("/////////////////////////////////////////////////////\n");
+    print(mod);
 
     return List.generate(
       maps.length,
@@ -113,6 +116,7 @@ class DatabaseHelper {
 
   Future<void> deleteNote(Note note) async {
     Database? db = await instance.database;
+
     if (note.syncDataStatus == SyncDataStatus.synced.name) {
       await addModifiedData(id: note.noteId!, status: DataStatus.delete.name);
     }
